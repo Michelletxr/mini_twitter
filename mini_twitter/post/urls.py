@@ -6,7 +6,7 @@ from post import views
 app_name = 'post'
 
 router = DefaultRouter()
-router.register('posts', views.PostLikeViewSet, basename='post')
+router.register('like-posts', views.PostLikeViewSet, basename='post')
 
 urlpatterns = [
     path('', include(router.urls)),

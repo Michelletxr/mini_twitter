@@ -10,7 +10,7 @@ class UserAccount(AbstractUser):
     first_name = models.CharField(verbose_name='first name', max_length=30)
     last_name = models.CharField(verbose_name='last name', max_length=150)
     email = models.EmailField(verbose_name='email address', unique=True)
-    birthdate = models.DateField(verbose_name='birthdate')
+    date_of_birth = models.DateField(verbose_name='birthdate')
 
     groups = models.ManyToManyField(
         Group,
@@ -33,5 +33,13 @@ class UserAccount(AbstractUser):
 
     def __str__(self):
         return f"User {self.username} account"
+    
 
+    def follow(self, user):
+        """Segue um usuário."""
+        self.following.add(user)
+
+    def unfollow(self, user):
+        """Deixa de seguir um usuário."""
+        self.following.remove(user)
 

@@ -96,7 +96,7 @@ DATABASES = {
 }
 
 
-AUTH_USER_MODEL = 'auth_user.UserAccount'
+#AUTH_USER_MODEL = 'auth_user.UserAccount'
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -122,6 +122,20 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ]
 }
+
+#cache 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",  # URL do Redis
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+CACHE_TTL = 60 * 60
+
 
 
 # Internationalization
