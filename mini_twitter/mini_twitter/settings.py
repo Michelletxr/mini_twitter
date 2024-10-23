@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'auth_user',
     'drf_yasg',
     'post',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -93,6 +94,17 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
+
+
+
+SIMPLE_JWT = {
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "AUTH_HEADER_TYPES": (
+        "Bearer",
+        "JWT",
+    ),
 }
 
 

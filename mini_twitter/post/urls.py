@@ -10,4 +10,6 @@ router.register('like-posts', views.PostLikeViewSet, basename='post')
 
 urlpatterns = [
     path('', include(router.urls)),
+    #testar rota de cache
+    path('posts-cache', views.get_posts_cacheable, name='posts-cache')
 ]

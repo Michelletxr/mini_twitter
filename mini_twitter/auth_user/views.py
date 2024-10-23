@@ -4,12 +4,14 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import viewsets
+from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from mini_twitter.settings import CACHE_TTL
 from post.models import Post
 
 
-from .serializers import UserAccountSerializer
+from .serializers import LoginSerializer, UserAccountSerializer
 from .models import UserAccount
 
 @api_view(['POST'])
@@ -58,3 +60,18 @@ class AccountViewSet(viewsets.ModelViewSet):
     #adicionar paginação
     #adicionar cache
     #rota de login customizada
+
+
+class LoginViewSet(viewsets.ViewSet):
+    serializer_class = LoginSerializer
+
+    def create(self, request):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.validated_data['user']
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            })
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
