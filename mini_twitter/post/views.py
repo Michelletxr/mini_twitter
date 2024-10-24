@@ -20,8 +20,6 @@ def get_posts_cacheable(request):
     posts = Post.objects.all()
       # Serializa os posts
     #serializer = PostLikeSerializer(posts, many=True)
-    
-    # Retorna a resposta serializada
     return Response(posts)
 
 class PostLikeViewSet(viewsets.ModelViewSet):
