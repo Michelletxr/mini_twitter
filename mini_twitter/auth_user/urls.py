@@ -16,6 +16,6 @@ urlpatterns = [
     path('user/follow/<str:username>/', views.follow_userr, name='follow-user'),
     path('user/unfollow/<str:username>/', views.unfollow_user, name='unfollow_user'),
     path('user/feed/', views.feed_user, name='feed_user'),
-    path('user/login/', views.LoginViewSet.as_view({'post': 'create'}), name='login_user'),
+    path('user/login/', views.LoginViewSet.as_view(), name='login_user'),
 
 ]

@@ -3,10 +3,11 @@ from django.core.cache import cache
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from mini_twitter.utils import CustomPagination
 from mini_twitter.settings import CACHE_TTL
 from post.models import Post
 
@@ -53,6 +54,7 @@ def feed_user(request):
 class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = UserAccountSerializer
     queryset = serializer_class.Meta.model.objects.all()
+    pagination_class = CustomPagination
     pass
     
     #terminar rotas 
@@ -62,10 +64,10 @@ class AccountViewSet(viewsets.ModelViewSet):
     #rota de login customizada
 
 
-class LoginViewSet(viewsets.ViewSet):
+class LoginViewSet(generics.CreateAPIView):
     serializer_class = LoginSerializer
 
-    def create(self, request):
+    def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data['user']

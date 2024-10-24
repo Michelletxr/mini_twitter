@@ -3,9 +3,13 @@ from django.contrib.auth import authenticate
 from .models import UserAccount
 
 class UserAccountSerializer(serializers.ModelSerializer):
+    followers_count = serializers.SerializerMethodField()
     class Meta:
         model = UserAccount
         fields = '__all__'
+    
+    def get_followers_count(self, instance: UserAccount):
+        return instance.author.followers.all()
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)
