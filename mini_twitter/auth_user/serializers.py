@@ -5,14 +5,17 @@ from .models import UserAccount
 
 class UserAccountSerializer(serializers.ModelSerializer):
     followers_count = serializers.SerializerMethodField()
+    followers = serializers.StringRelatedField(many=True, read_only=True)
+    following = serializers.StringRelatedField(many=True, read_only=True)
+
     class Meta:
         model = UserAccount
-        #fields = '__all__'
         exclude = ('last_login', 'is_active', 'is_staff', 'is_superuser')
-        read_only_fields = ('groups', 'user_permissions', 'followers')   
+        read_only_fields = ('groups', 'user_permissions', 'followers')
 
     def get_followers_count(self, instance: UserAccount):
-        return instance.followers.all()
+        return instance.followers.count()
+
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)

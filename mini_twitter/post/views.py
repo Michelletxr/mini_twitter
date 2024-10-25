@@ -18,9 +18,8 @@ from rest_framework.response import Response
 @cache_page(CACHE_TTL)
 def get_posts_cacheable(request):
     posts = Post.objects.all()
-      # Serializa os posts
-    #serializer = PostLikeSerializer(posts, many=True)
-    return Response(posts)
+    serializer = PostLikeSerializer(posts, many=True)
+    return Response(Response(data={"posts_cache":serializer.data}))
 
 class PostLikeViewSet(viewsets.ModelViewSet):
     serializer_class = PostLikeSerializer

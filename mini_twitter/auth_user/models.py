@@ -58,7 +58,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         verbose_name = "Account User"
 
     def __str__(self):
-        return f"User {self.username} account"
+        return f"{self.username}"
     
 
     def follow(self, user):

@@ -78,21 +78,14 @@ WSGI_APPLICATION = 'mini_twitter.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-'''DATABASES = {
+DATABASES = {
      'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'mini_twitter_db',         # Nome do banco de dados
         'USER': 'postgres',          # Usuário do PostgreSQL
         'PASSWORD': 'postgres',   # Senha do PostgreSQL
-        'HOST': '172.17.0.3',  # IP do container PostgreSQL     
+        'HOST': 'localhost',  # IP do container PostgreSQL     
         'PORT': '5432',              # Porta do PostgreSQL
-    }
-}'''
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -146,7 +139,7 @@ CACHES = {
     }
 }
 
-CACHE_TTL = 60 * 60
+CACHE_TTL = 5
 
 
 

@@ -10,6 +10,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from mini_twitter.utils import CustomPagination
 from mini_twitter.settings import CACHE_TTL
 from post.models import Post
+from post.serializers import PostLikeSerializer
 
 
 from .serializers import LoginSerializer, UserAccountSerializer
@@ -36,25 +37,27 @@ def unfollow_user(request, username):
 #@cache_page(CACHE_TTL)
 def feed_user(request):
     """feed do usuário."""
+    
     user = request.user
     cache_key = f"user_feed_{user.id}"
-     # Tenta obter o feed do cache
+    # Tenta obter o feed do cache
     feed_cache = cache.get(cache_key)
+
     if not feed_cache:
-       
         following_users = user.following.all()
         # Ordena por data de criação (mais recentes primeiro)
         feed = Post.objects.filter(user__in=following_users) | Post.objects.filter(user=user).order_by('-updated_at')
-        feed_data = [{'user': post.user.username, 'content': post.content, 'created_at': post.created_at} for post in feed]
         # Armazena o feed no cache
-        cache.set(cache_key, feed_data, timeout=CACHE_TTL)
+        cache.set(cache_key, list(feed.values()), timeout=CACHE_TTL)
+        # Tenta obter o feed do cache novamente
+        feed_cache = cache.get(cache_key)
     
-    return Response(feed_data)
+    return Response(data={"posts":feed_cache})
 
 class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = UserAccountSerializer
     queryset = serializer_class.Meta.model.objects.all()
-    pagination_class = CustomPagination
+   # pagination_class = CustomPagination
     pass
     
     #terminar rotas 
