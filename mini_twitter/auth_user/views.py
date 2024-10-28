@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.core.cache import cache
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import viewsets, generics
 from rest_framework import status
@@ -21,7 +21,10 @@ from .models import UserAccount
 def follow_userr(request, username):
     """Seguir um usuário"""
     user_to_follow = get_object_or_404(UserAccount, username=username)
-    request.user.follow(user_to_follow)
+    user = UserAccount.objects.get(id=request.user.id)
+    user.follow(user_to_follow)
+    user_to_follow.total_followers = user_to_follow.total_followers + 1
+    user_to_follow.save(update_fields=['total_followers'])
     return Response({"detail": f"Você seguiu {user_to_follow.username}"})
 
 @api_view(['POST'])
@@ -37,7 +40,6 @@ def unfollow_user(request, username):
 #@cache_page(CACHE_TTL)
 def feed_user(request):
     """feed do usuário."""
-    
     user = request.user
     cache_key = f"user_feed_{user.id}"
     # Tenta obter o feed do cache
@@ -56,15 +58,21 @@ def feed_user(request):
 
 class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = UserAccountSerializer
-    queryset = serializer_class.Meta.model.objects.all()
-   # pagination_class = CustomPagination
-    pass
-    
-    #terminar rotas 
-    #terminar funcinalidades principais
-    #adicionar paginação
-    #adicionar cache
-    #rota de login customizada
+    queryset = serializer_class.Meta.model.objects.all().order_by('username')
+    pagination_class = CustomPagination
+   
+
+    # Definir permissões para as ações
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            # Permitir acesso a todos na rota de listagem
+            return [AllowAny()]
+       
+        return [IsAuthenticated()]
+
+    #DOCKER
+    #CELERY E EMAIL
+
 
 
 class LoginViewSet(generics.CreateAPIView):

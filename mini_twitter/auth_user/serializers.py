@@ -7,6 +7,7 @@ class UserAccountSerializer(serializers.ModelSerializer):
     followers_count = serializers.SerializerMethodField()
     followers = serializers.StringRelatedField(many=True, read_only=True)
     following = serializers.StringRelatedField(many=True, read_only=True)
+    password = serializers.CharField(write_only=True)
 
     class Meta:
         model = UserAccount

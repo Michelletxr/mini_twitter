@@ -1,5 +1,5 @@
 # Informa a imagem base
-FROM python:3.9
+FROM python:3.11.3
 # Define o variáveis de ambiente
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'post',
     'django_extensions',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -129,6 +130,9 @@ REST_FRAMEWORK = {
 }
 
 #cache 
+REDIS_URL = "redis://localhost:6379/0"
+broker_connection_retry_on_startup = True
+
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -164,3 +168,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Email Setup
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "michelleteixeiramartins@gmail.com"
+EMAIL_HOST_PASSWORD = "zuibkodiogqpzkmt"
+

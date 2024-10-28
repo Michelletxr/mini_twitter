@@ -3,7 +3,7 @@ version: '3'
 services:
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
     ports:
@@ -12,9 +12,8 @@ services:
       - db
   db:
     image: postgres
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
+
     environment:
-      - POSTGRES_USER=mini_twitter_db
-      - POSTGRES_PASSWORD=postgress
-      - POSTGRES_DB=postgress
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=mini_twitter_db

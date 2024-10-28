@@ -1,4 +1,5 @@
 
+from typing import Any
 from django.contrib.auth.models import Group, Permission
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
@@ -14,8 +15,8 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('O usuário deve ter um endereço de email.')
         
         email = self.normalize_email(email)
-        user = self.model(username=username, email=email, **extra_fields)
-        user.set_password(password)
+        user = self.model(username=username, email=email, password=password, **extra_fields)
+        #user.set_password(password)
         user.save(using=self._db)
         return user
     
@@ -24,10 +25,15 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(username, email, password, **extra_fields)
+    
+    def create(self,  username, email, password=None, **extra_fields) -> Any:
+        return self.create_user(username, email, password, **extra_fields)
+    
 
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=150, unique=True)
     followers = models.ManyToManyField('self', symmetrical=False, verbose_name='followers', related_name='following', blank=True)
+    total_followers = models.IntegerField(default=0)
     first_name = models.CharField(verbose_name='first name', max_length=30)
     last_name = models.CharField(verbose_name='last name', max_length=150)
     email = models.EmailField(verbose_name='email address', unique=True)
